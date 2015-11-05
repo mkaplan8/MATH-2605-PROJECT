@@ -11,7 +11,7 @@ import java.util.Locale;
  * Matrix class to represent 2D arrays as matrices
  * Uses code from http://math.nist.gov/javanumerics/jama/ to implement
  * basic matrix operations.
- * @author Chingyeu Andy Leekung, Joeseph Lesniak, Jacob Goodpasture
+ * @author Daniel Ansher, Max Kaplan, Jacob Goodpasture
  * @version 1.0
  */
 public class Matrix implements Cloneable, java.io.Serializable  {
