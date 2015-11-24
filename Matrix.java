@@ -136,7 +136,7 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 		for (int i = 0; i < m; i++) {
 			if (A[i].length != n) {
 				throw new IllegalArgumentException
-				("All rows must have the same length.");
+						("All rows must have the same length.");
 			}
 			for (int j = 0; j < n; j++) {
 				C[i][j] = A[i][j];
@@ -157,6 +157,22 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 			}
 		}
 		return X;
+	}
+
+	/**
+	 * Copy a matrix
+	 * @param b matrix to copy
+	 * @return copied matrix
+	 */
+	public Matrix copyMatrix(Matrix b) {
+		Matrix ret = new Matrix(b.m, b.n);
+		for (int i = 0; i < b.getRowDimension(); i++) {
+			for (int j = 0; j < b.getColumnDimension(); j++) {
+				double setVal = b.get(i, j);
+				ret.set(i, j, setVal);
+			}
+		}
+		return ret;
 	}
 
 	/** Clone the Matrix object.
@@ -553,17 +569,66 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 	 * @param m    Number of rows.
 	 * @param n    Number of columns.
 	 * @return     An m-by-n matrix with ones on the diagonal and zeros elsewhere.
-	  */
-	   public static Matrix identity (int m, int n) {
-	      Matrix A = new Matrix(m,n);
-	      double[][] X = A.getArray();
-	      for (int i = 0; i < m; i++) {
-	         for (int j = 0; j < n; j++) {
-	            X[i][j] = (i == j ? 1.0 : 0.0);
-	         }
-	      }
-	      return A;
-	   }
+	 */
+	public static Matrix identity (int m, int n) {
+		Matrix A = new Matrix(m,n);
+		double[][] X = A.getArray();
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				X[i][j] = (i == j ? 1.0 : 0.0);
+			}
+		}
+		return A;
+	}
+
+	/**
+	 * Takes a matrix and inverts it
+	 * @param a matrix to invert
+	 * @return inverted matrix
+	 */
+	public static Matrix inverse(Matrix a) {
+		for (int i = 0; i < a.getRowDimension(); i++) {
+			for (int j = 0; j < a.getColumnDimension(); j++) {
+				if (i == j) {
+					double invertValue = 1 / (a.get(i, j));
+					a.set(i, j, invertValue);
+				}
+			}
+		}
+		return a;
+	}
+
+	/**
+	 * Takes in a matrix and returns that matrix with all entries except the diagonal as zero
+	 * @param a nxn square matrix
+	 * @return the matrix with everything except the diagonal as zero
+	 */
+	public static Matrix diagonal(Matrix a) {
+		for (int i = 0; i < a.getRowDimension(); i++) {
+			for (int j = 0; j < a.getColumnDimension(); j++) {
+				if (i != j) {
+					a.set(i, j, 0);
+				}
+			}
+		}
+		return a;
+	}
+
+	/**
+	 * Takes in a sqaure matrix and returns the matrix with diagonal entries made to 0
+	 * @param a nxn square matrix
+	 * @return matrix where only the diagonals are zero
+	 */
+	public static Matrix zeroDiagonal(Matrix a) {
+		for (int i = 0; i < a.getRowDimension(); i++) {
+			for (int j = 0; j < a.getColumnDimension(); j++) {
+				if (i == j) {
+					a.set(i, j, 0);
+				}
+			}
+		}
+		return a;
+	}
 
 	/** Print the matrix to stdout.   Line the elements up in columns
 	 * with a Fortran-like 'Fw.d' style format.
@@ -596,9 +661,9 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 	 * characters.
 	 * Note that is the matrix is to be read back in, you probably will want
 	 * to use a NumberFormat that is set to US Locale.
-   @param format A  Formatting object for individual elements.
-   @param width     Field width for each column.
-   @see java.text.DecimalFormat#setDecimalFormatSymbols
+	 @param format A  Formatting object for individual elements.
+	 @param width     Field width for each column.
+	 @see java.text.DecimalFormat#setDecimalFormatSymbols
 	 */
 
 	public void print (NumberFormat format, int width) {
@@ -614,10 +679,10 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 	 * characters.
 	 * Note that is the matrix is to be read back in, you probably will want
 	 * to use a NumberFormat that is set to US Locale.
-   @param output the output stream.
-   @param format A formatting object to format the matrix elements
-   @param width  Column width.
-   @see java.text.DecimalFormat#setDecimalFormatSymbols
+	 @param output the output stream.
+	 @param format A formatting object to format the matrix elements
+	 @param width  Column width.
+	 @see java.text.DecimalFormat#setDecimalFormatSymbols
 	 */
 
 	public void print (PrintWriter output, NumberFormat format, int width) {
@@ -678,11 +743,11 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 			int j = 0;
 			do {
 				if (j >= n) throw new java.io.IOException
-				("Row " + v.size() + " is too long.");
+						("Row " + v.size() + " is too long.");
 				row[j++] = Double.valueOf(tokenizer.sval).doubleValue();
 			} while (tokenizer.nextToken() == StreamTokenizer.TT_WORD);
 			if (j < n) throw new java.io.IOException
-			("Row " + v.size() + " is too short.");
+					("Row " + v.size() + " is too short.");
 		}
 		int m = v.size();  // Now we've got the number of rows.
 		double[][] A = new double[m][];
@@ -764,7 +829,7 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 		this.n = X.n;
 		return this;
 	}
-	
+
 	/**
 	 * Multiply a matrix with a vector
 	 * @param b Vector to multiply with
@@ -821,7 +886,7 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 		}
 		return ans;
 	}
-	
+
 	/**
 	 * Calculates the max norm of a matrix
 	 * @return The greatest element in the matrix
@@ -834,52 +899,34 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 		}
 		return norm;
 	}
-	
-	
-	
-	/**
-	 * Hilbert Matrix
-	 * @param n Dimension
-	 * @return a n x n Hilbert Matrix
-	 */
-	public static Matrix hilbertMatrix(int n) {
-		double[][] hilArray = new double[n][n];
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				hilArray[i][j] = 1. / (1 + j + i);
-			}
-		}
-		Matrix hilbert = new Matrix(hilArray);
-		return hilbert;
-	}
 
 	/**
 	 * Get an instance of the QR decomposition class using householder
 	 * reflections
 	 * @return An instance of the QR decomposition with householders
 	 */
-	public QRDecompHouseHolder qrHouseHolder() {
-		return new QRDecompHouseHolder(this);
-	}
+//    public QRDecompHouseHolder qrHouseHolder() {
+//        return new QRDecompHouseHolder(this);
+//    }
 
 	/**
 	 * Get an instance of the QR decomposition class using givens
 	 * rotations
 	 * @return An instance of the QR decomposition with givens
 	 */
-	public QRDecompGivens qrGivens() {
-		return new QRDecompGivens(this);
-	}
+//    public QRDecompGivens qrGivens() {
+//        return new QRDecompGivens(this);
+//    }
 
-	/* ------------------------
+    /* ------------------------
        Private Methods
-	 * ------------------------ */
+     * ------------------------ */
 	private void checkMultiplyDimensions(Matrix B) {
 		if (this.n != B.m) {
 			throw new IllegalArgumentException("First matrix n must equal second matrix m.");
 		}
 	}
-	
+
 	protected void checkMultiplyVectorDimensions(double[] b) {
 		if (m != b.length) {
 			throw new IllegalArgumentException("Matrix and vector must be same length");
@@ -897,16 +944,16 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 	 * @return Row vector
 	 */
 	public double[] getRowVector(int mIndex, int nIndex) {
-	    try {
-	        double[] rowVector = new double[this.n - nIndex];
-	        for (int i = nIndex; i < this.n; i++) {
-	        	rowVector[i - nIndex] = this.A[mIndex][i];
-	        }
-	        //rowVector = A[colIndex];
-	        return rowVector;
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	        throw new ArrayIndexOutOfBoundsException("Index is not valid");
-	    }
+		try {
+			double[] rowVector = new double[this.n - nIndex];
+			for (int i = nIndex; i < this.n; i++) {
+				rowVector[i - nIndex] = this.A[mIndex][i];
+			}
+			//rowVector = A[colIndex];
+			return rowVector;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new ArrayIndexOutOfBoundsException("Index is not valid");
+		}
 	}
 
 	/**
@@ -925,15 +972,15 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 	 * @return Column vector
 	 */
 	public double[] getColumnVector(int mIndex, int nIndex) {
-	    try {
-	        double[] colVector = new double[this.m - mIndex];
-	        for (int i = mIndex; i < this.m; i++) {
-	            colVector[i - mIndex] = this.A[i][nIndex];
-	        }
-	        return colVector;
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	        throw new ArrayIndexOutOfBoundsException("Index is not valid");
-	    }
+		try {
+			double[] colVector = new double[this.m - mIndex];
+			for (int i = mIndex; i < this.m; i++) {
+				colVector[i - mIndex] = this.A[i][nIndex];
+			}
+			return colVector;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new ArrayIndexOutOfBoundsException("Index is not valid");
+		}
 	}
 
 	/**
@@ -974,6 +1021,19 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 		}
 		norm = Math.sqrt(norm);
 		return norm;
+	}
+
+	/**
+	 * Normalize a vector
+	 * @param a vector to be normalized
+	 * @return the normalized vector
+	 */
+	public static double[] normalizeVector(double[] a) {
+		double norm = Matrix.norm(a);
+		for (int i = 0; i < a.length; i++) {
+			a[i] = a[i] / norm;
+		}
+		return a;
 	}
 
 	/**
@@ -1025,6 +1085,22 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 	}
 
 	/**
+	 * multiply a matrix and a vector together
+	 * @param m the matrix
+	 * @param v the vector
+	 * @return a vector product of m and v
+	 */
+	public static double[] matrixVectorMultiply(Matrix m, double[] v) {
+		double[] answer = new double[v.length];
+		for (int i = 0; i < m.getColumnDimension(); i++) {
+			for (int j = 0; j < m.getRowDimension(); j++) {
+				answer[i] += m.get(i,j) * v[j];
+			}
+		}
+		return answer;
+	}
+
+	/**
 	 * Multiply two vectors, assuming one is a row and the other is a column
 	 * @param a First vector, column vector
 	 * @param b Second vector, row vector
@@ -1040,22 +1116,7 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 		}
 		return X;
 	}
-	
-	/**
-	 * Returns the b for the hilbert matrix 
-	 * b = (0.1)^(n/3)* (1, 1,...,1)^t
-	 * @param n The length of the hilbert matrix n
-	 * @return b for the hilbert matrix
-	 */
-	public static double[] hilbertB(int n) {
-		double[] b = new double[n];
-		double x = Math.pow(0.1, n/3.);
-		for (int i = 0; i < b.length; i++) {
-			b[i] = x;
-		}
-		return b;
-	}
-	
+
 	/**
 	 * Gets the max element in an array
 	 * @param arr Array to find
