@@ -123,6 +123,27 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 	   Public Methods
 	 * ------------------------ */
 
+    /**
+     * Finds the current of a SQUARE matrix
+     * @return int trace of Matrix
+     */
+    public double trace() {
+        double trace = 0;
+        for (int i = 0; i < m; i++) {
+            trace += A[i][i];
+        }
+        return trace;
+    }
+
+    public Matrix inverse2by2() {
+        double det = 1 / ((A[0][0] * A[1][1]) - (A[0][1] * A[1][0]));
+        double[][] inv = {{A[1][1] * det, -A[0][1] * det}, {-A[1][0] * det, A[0][0] * det}};
+
+        Matrix ret = new Matrix(inv);
+        return ret;
+
+    }
+
 	/** Construct a matrix from a copy of a 2-D array.
 	 * @param A    Two-dimensional array of doubles.
 	 * @exception  IllegalArgumentException All rows must have the same length
@@ -755,7 +776,6 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 		return new Matrix(A);
 	}
 
-
 	/* ------------------------
        Private Methods
 	 * ------------------------ */
@@ -764,7 +784,7 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 
 	private void checkMatrixDimensions (Matrix B) {
 		if (B.m != m || B.n != n) {
-			throw new IllegalArgumentException("Matrix dimensions must agree.");
+			throw new IllegalArgumentException("Matrix dimensions must agree, B.m=m? " + B.m + "=" + m + ",  B.n=n? " + B.n + "=" + n);
 		}
 	}
 
@@ -900,23 +920,6 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 		return norm;
 	}
 
-	/**
-	 * Get an instance of the QR decomposition class using householder
-	 * reflections
-	 * @return An instance of the QR decomposition with householders
-	 */
-//    public QRDecompHouseHolder qrHouseHolder() {
-//        return new QRDecompHouseHolder(this);
-//    }
-
-	/**
-	 * Get an instance of the QR decomposition class using givens
-	 * rotations
-	 * @return An instance of the QR decomposition with givens
-	 */
-//    public QRDecompGivens qrGivens() {
-//        return new QRDecompGivens(this);
-//    }
 
     /* ------------------------
        Private Methods
@@ -1132,5 +1135,21 @@ public class Matrix implements Cloneable, java.io.Serializable  {
 	/* ------------------------
 	   End Vector Stuff
 	 * ------------------------ */
+
+    /**
+     * Gets String representation of matrix.
+     * Columns separated by tabs, rows by new lines.
+     * @return String representation of matrix.
+     */
+    public String toString() {
+        String str = "";
+        for (int row = 0; row < A.length; row++) {
+            for (int col = 0; col < A[0].length; col++) {
+                str += A[row][col] + " ";
+            }
+            str += "\n";
+        }
+        return str;
+    }
 
 }

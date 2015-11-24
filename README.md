@@ -1,2 +1,0 @@
-# MATH-2605-PROJECT
-Project for MATH 2605 Fall 2015
